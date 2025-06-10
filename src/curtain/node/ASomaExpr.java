@@ -8,7 +8,7 @@ import curtain.analysis.*;
 public final class ASomaExpr extends PExpr
 {
     private PExpr _expr_;
-    private TSoma _soma_;
+    private TMais _mais_;
     private PFactor _factor_;
 
     public ASomaExpr()
@@ -18,13 +18,13 @@ public final class ASomaExpr extends PExpr
 
     public ASomaExpr(
         @SuppressWarnings("hiding") PExpr _expr_,
-        @SuppressWarnings("hiding") TSoma _soma_,
+        @SuppressWarnings("hiding") TMais _mais_,
         @SuppressWarnings("hiding") PFactor _factor_)
     {
         // Constructor
         setExpr(_expr_);
 
-        setSoma(_soma_);
+        setMais(_mais_);
 
         setFactor(_factor_);
 
@@ -35,7 +35,7 @@ public final class ASomaExpr extends PExpr
     {
         return new ASomaExpr(
             cloneNode(this._expr_),
-            cloneNode(this._soma_),
+            cloneNode(this._mais_),
             cloneNode(this._factor_));
     }
 
@@ -70,16 +70,16 @@ public final class ASomaExpr extends PExpr
         this._expr_ = node;
     }
 
-    public TSoma getSoma()
+    public TMais getMais()
     {
-        return this._soma_;
+        return this._mais_;
     }
 
-    public void setSoma(TSoma node)
+    public void setMais(TMais node)
     {
-        if(this._soma_ != null)
+        if(this._mais_ != null)
         {
-            this._soma_.parent(null);
+            this._mais_.parent(null);
         }
 
         if(node != null)
@@ -92,7 +92,7 @@ public final class ASomaExpr extends PExpr
             node.parent(this);
         }
 
-        this._soma_ = node;
+        this._mais_ = node;
     }
 
     public PFactor getFactor()
@@ -125,7 +125,7 @@ public final class ASomaExpr extends PExpr
     {
         return ""
             + toString(this._expr_)
-            + toString(this._soma_)
+            + toString(this._mais_)
             + toString(this._factor_);
     }
 
@@ -139,9 +139,9 @@ public final class ASomaExpr extends PExpr
             return;
         }
 
-        if(this._soma_ == child)
+        if(this._mais_ == child)
         {
-            this._soma_ = null;
+            this._mais_ = null;
             return;
         }
 
@@ -164,9 +164,9 @@ public final class ASomaExpr extends PExpr
             return;
         }
 
-        if(this._soma_ == oldChild)
+        if(this._mais_ == oldChild)
         {
-            setSoma((TSoma) newChild);
+            setMais((TMais) newChild);
             return;
         }
 

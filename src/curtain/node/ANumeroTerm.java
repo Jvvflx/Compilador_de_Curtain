@@ -7,7 +7,7 @@ import curtain.analysis.*;
 @SuppressWarnings("nls")
 public final class ANumeroTerm extends PTerm
 {
-    private TNumero _numero_;
+    private TCharDec _charDec_;
 
     public ANumeroTerm()
     {
@@ -15,10 +15,10 @@ public final class ANumeroTerm extends PTerm
     }
 
     public ANumeroTerm(
-        @SuppressWarnings("hiding") TNumero _numero_)
+        @SuppressWarnings("hiding") TCharDec _charDec_)
     {
         // Constructor
-        setNumero(_numero_);
+        setCharDec(_charDec_);
 
     }
 
@@ -26,7 +26,7 @@ public final class ANumeroTerm extends PTerm
     public Object clone()
     {
         return new ANumeroTerm(
-            cloneNode(this._numero_));
+            cloneNode(this._charDec_));
     }
 
     @Override
@@ -35,16 +35,16 @@ public final class ANumeroTerm extends PTerm
         ((Analysis) sw).caseANumeroTerm(this);
     }
 
-    public TNumero getNumero()
+    public TCharDec getCharDec()
     {
-        return this._numero_;
+        return this._charDec_;
     }
 
-    public void setNumero(TNumero node)
+    public void setCharDec(TCharDec node)
     {
-        if(this._numero_ != null)
+        if(this._charDec_ != null)
         {
-            this._numero_.parent(null);
+            this._charDec_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class ANumeroTerm extends PTerm
             node.parent(this);
         }
 
-        this._numero_ = node;
+        this._charDec_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._numero_);
+            + toString(this._charDec_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._numero_ == child)
+        if(this._charDec_ == child)
         {
-            this._numero_ = null;
+            this._charDec_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class ANumeroTerm extends PTerm
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._numero_ == oldChild)
+        if(this._charDec_ == oldChild)
         {
-            setNumero((TNumero) newChild);
+            setCharDec((TCharDec) newChild);
             return;
         }
 

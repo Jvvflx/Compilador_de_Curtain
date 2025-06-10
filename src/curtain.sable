@@ -1,39 +1,204 @@
 Package curtain;
 
 Helpers
+    all = [0 .. 0xFFFF];    /* Qualquer caractere da tabela ASCII */
+    lowercase = ['a' ..'z'];
+    uppercase = ['A' ..'Z'];
     digito = ['0' .. '9'];
+    digito_hexa = [digito + [['a' .. 'f'] + ['A' .. 'F']]];
+
     espaco = ' ';
+    tab = 9;
     rc = 13;
     nl = 10;
- 
+    eol = rc nl | rc | nl;
+    blank = (eol | tab | espaco)+;
+
+    not_cr_lf = [all - [rc + nl]];      /* Definição dos caracteres ASCII, exceto pelo return(13) e newline(10)  */
+    not_estrela = [all - '*'];
+    not_estrela_barra = [not_estrela - '/'];
+
+    short_comment = '//' not_cr_lf* eol;
+    long_comment = '/*' not_estrela* '*'+ (not_estrela_barra not_estrela* '*'+)* '/';
+    comment = short_comment | long_comment;
+
+    letra = lowercase | uppercase | '_' | '$';
+
+    id_part = lowercase (lowercase | digito)*;
+
+ States
+    normal, package;
+
 Tokens
-    numero = digito+;
-    soma = '+';
-    menos = '-';
-    mult = '*';
-    div = '/';
-    divint = '//';
-    mod = '%';
+
+    /* A seguir são as definições dos Tokens, é permitido o uso de expressões regulares helpers, no corpo da definição *
+     * do token. Em uma dada entrada, a maior definição válida é escolhida, no caso de igualdade com outra definição  *
+     * a que aparece primeiro é escolhida, os níveis de prioridade estão sempre de acordo com a precendência que ele  *
+     * aparece, mostrado nas atribuições a seguir, o char possui prioridade superior a string.                        */
+
+    {package} pkg_id = letra (letra | digito)*;
+
+    {normal->package} package = 'Package';
+
+    states = 'States';
+    helpers = 'Helpers';
+    tokens = 'Tokens';
+    ignored = 'Ignored';
+    productions = 'Productions';
+
+    token_specifier = 'T';
+    production_spceifier = 'P';
+
+    dot = '.';
+    d_dot = '..';
+
+
+    {normal, package->normal} semicolon = ';';
+
+    igualdade = '=';
+    col_esq = '[';
+    col_dir = ']';
     par_esq = '(';
     par_dir = ')';
-    vazio = (espaco | rc | nl)+;
+    chave_esq = '{';
+    chave_dir = '}';
+    mais = '+';
+    menos = '-';
+    q_mark = '?';
+    estrela = '*';
+    barra = '|';
+    virgula = ',';
+    slash = '/';
+    s_slash = '//';
+    mod = '%';
+    seta_dir = '->';
+    colon = ':';
 
+    id = id_part ('_' id_part)*;
+
+    char = ''' not_cr_lf ''';       /* Definição de como um caractere é reconhecido => 'a' */
+    char_dec = digito+;
+    char_hexa = '0' ('x' | 'X') digito_hexa+;
+
+    string = ''' [not_cr_lf - ''']+ ''';        /* Definição de como uma string é reconhecida => 'abcd' */
+
+    blank = blank;
+    comment = comment;
 
 Ignored Tokens
-    vazio;
+    blank, comment;
 
 Productions
+
+    /* A seguir são as definições das Productions, a primeira produção é usada pela produção inicial implícita:          *
+     * start = (first production)   EOF;                                                                                 *
+     * ?, + e * possuem o mesmo significado que os seus valores nas expressões regulares.                                *
+     * No caso de um Token e uma Production compartilharem o mesmo nome deve se diferenciar pelo uso de 'T.' e 'P.'      *
+     * Cada alternativa pode explicitamente ser nomeada: '{nome}'. Cada elemento alternativo pode ser nomeado: '[nome]:' */
+
+    start = 
+        {grammar} grammar | 
+        {expression} expr;
+
+    grammar = P.package? P.helpers? P.states? P.tokens? P.ign_tokens? P.productions?;
+
+    package = T.package pkg_name?;
+
+    pkg_name = pkg_id [pkg_ids]:pkg_name_tail* semicolon;
+
+    pkg_name_tail = dot pkg_id;
+
+    helpers = T.helpers [helper_defs]: helper_def*;
+
+    helper_def = id igualdade expr_reg semicolon;
+
+    states = T.states id_list? semicolon;
+
+    id_list = id [ids]:id_list_tail*;
+
+    id_list_tail = virgula id;
+
+    tokens = T.tokens [token_defs]: token_def*;
+
+    token_def = state_list? id igualdade expr_reg look_ahead? semicolon;
+
+    state_list = chave_esq id transition? [state_lists]:state_list_tail* chave_dir;
+
+    state_list_tail = virgula id transition?;
+
+    transition = seta_dir id;
+
+    ign_tokens = ignored T.tokens id_list? semicolon;
+
+    look_ahead = slash expr_reg;
+
+    expr_reg = concat[concats]:expr_reg_tail*;
+
+    expr_reg_tail = barra concat;
+
+    concat = [expr_uns]:expr_un*;
+
+    expr_un = basic op_un?;
+
+    basic = 
+        {char} P.char |
+        {conjunto} conjunto |
+        {string} string |
+        {id} id |
+        {expr_reg} par_esq expr_reg par_dir;
+
+    char = 
+        {char} T.char |
+        {dec} char_dec |
+        {hex} char_hexa;
+
+    conjunto = 
+        {operacao} col_esq [left]:basic op_bin [right]:basic col_dir |
+        {intervalo} col_esq [left]:P.char d_dot [right]:P.char col_dir;
+    
+    op_un = 
+        {estrela} T.estrela |
+        {q_mark} T.q_mark |
+        {mais} T.mais;
+
+    op_bin = 
+        {mais} T.mais |
+        {menos} T.menos;
+
+    productions = T.productions [prods]:prod*;
+
+    prod = id igualdade alts semicolon;
+
+    alts = alt [alts]:alts_tail*;
+
+    alts_tail = barra alt;
+
+    alt = 
+        {parsed} alt_name? [elems]:elem* |
+        {ignored} par_esq alt_name? [elems]:elem* par_dir;
+
+    alt_name = chave_esq id chave_dir;
+
+    elem = elem_name? specifier? id op_un?;
+
+    elem_name = col_esq id col_dir colon;
+
+    specifier = 
+        {token} token_specifier dot |
+        {production} production_spceifier dot; 
+
     expr = 
         {factor} factor |
-        {soma} expr soma factor |
-        {menos} expr menos factor;
+        {soma} expr mais factor |
+        {subtracao} expr menos factor;
 
     factor = 
         {term} term |
-        {mult} factor mult term |
-        {div} factor div term |
-        {mod} factor mod term;
-    
+        {multiplicacao} factor estrela term |
+        {divisao} factor slash term |
+        {modulo} factor mod term |
+        {divisaoint} factor s_slash term;
+
     term = 
-    {numero} numero |
-    {expr} par_esq expr par_dir;
+        {numero} char_dec |
+        {expr} par_esq expr par_dir; 

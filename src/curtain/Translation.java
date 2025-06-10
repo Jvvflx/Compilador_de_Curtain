@@ -6,34 +6,39 @@ import curtain.node.*;
 public class Translation extends DepthFirstAdapter
 {
 
-    public void caseANumeroTerm(TNumero node)
+    @Override public void caseANumeroTerm(ANumeroTerm node)
     {
-        System.out.println(node);
+        System.out.println(node.getCharDec());
     }
 
     @Override public void outASomaExpr(ASomaExpr node)
     {
-        System.out.println(node.getSoma());
+        System.out.println(node.getMais());
     }
 
-    @Override public void outAMenosExpr(AMenosExpr node)
+    @Override public void outASubtracaoExpr(ASubtracaoExpr node)
     {
         System.out.println(node.getMenos());
     }
 
-    @Override public void outAMultFactor(AMultFactor node)
+    @Override public void outAMultiplicacaoFactor(AMultiplicacaoFactor node)
     {
-        System.out.println(node.getMult());
+        System.out.println(node.getEstrela());
     }
 
-    @Override public void outADivFactor(ADivFactor node)
+    @Override public void outADivisaoFactor(ADivisaoFactor node)
     {
-        System.out.println(node.getDiv());
+        System.out.println(node.getSlash());
     }
 
-    @Override public void outAModFactor(AModFactor node)
+    @Override public void outAModuloFactor(AModuloFactor node)
     {
         System.out.println(node.getMod());
+    }
+
+    @Override public void outADivisaointFactor(ADivisaointFactor node)
+    {
+        System.out.println(node.getSSlash());
     }
 
 }

@@ -8,7 +8,7 @@
       "args": [
         "-jar",
         "/home/john/sablecc-3.7/lib/sablecc.jar",
-        "/home/john/Códigos/Visual-Studio-Code/CurtainLex/src/curtain.sable"
+        "/home/john/Códigos/Ambiente-Java/Compilador_de_Curtain/src/curtain.sable"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
