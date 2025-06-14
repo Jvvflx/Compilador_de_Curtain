@@ -1,7 +1,6 @@
 package curtain;
 import curtain.lexer.*;
 import curtain.node.*;
-import curtain.parser.*;
 import java.io.*;
 
 public class Main
@@ -13,25 +12,25 @@ public class Main
 			String arquivo = "/home/john/Códigos/Ambiente-Java/Compilador_de_Curtain/teste/teste.crtn";
 
 			// Teste do Parser
-			Parser parser = new Parser(
-								new Lexer(
-									new PushbackReader(  
-											new FileReader(arquivo), 1024))); 
-											// new InputStreamReader(System.in), 1024)));
-			Start tree = parser.parse();
+			// Parser parser = new Parser(
+			// 					new Lexer(
+			// 						new PushbackReader(  
+			// 								new FileReader(arquivo), 1024))); 
+			// 								// new InputStreamReader(System.in), 1024)));
+			// Start tree = parser.parse();
 
-			tree.apply(new Translation());
+			// tree.apply(new Translation());
 
 			// Teste do Lexer
-			// Lexer lexer = new Lexer(
-			// 					new PushbackReader(  
-			// 							new FileReader(arquivo), 1024)); 
-			// 							// new InputStreamReader(System.in), 1024)));
-			// Token token;
-			// while(!((token = lexer.next()) instanceof EOF)){
-			// 	System.out.println(token.getClass());
-			// 	System.out.println("(" + token.toString() + ")");
-			// }
+			Lexer lexer = new Lexer(
+								new PushbackReader(  
+										new FileReader(arquivo), 1024)); 
+										// new InputStreamReader(System.in), 1024)));
+			Token token;
+			while(!((token = lexer.next()) instanceof EOF)){
+				System.out.println(token.getClass());
+				System.out.println("( " + token.toString() + ")");
+			}
 
 			}
 		catch(Exception e)

@@ -24,7 +24,7 @@ Helpers
 
     letra = lowercase | uppercase | '_' | '$';
 
-    id_part = lowercase (lowercase | digito)*;
+    id_part = letra (letra | digito)*;
 
  States
     normal, package;
@@ -49,13 +49,31 @@ Tokens
     token_specifier = 'T';
     production_spceifier = 'P';
 
+    colon = ':';
+    semicolon = ';';
+    virgula = ',';
     dot = '.';
     d_dot = '..';
 
-
-    {normal, package->normal} semicolon = ';';
-
     igualdade = '=';
+    mais_eq = '+=';
+    menos_eq = '-=';
+    mult_eq = '*=';
+    div_eq = '/=';
+    mod_eq = '%=';
+    eq = '==';
+    neq = '!=';
+    lt = '<';
+    lteq = '<=';
+    gt = '>';
+    gteq = '>=';
+    m_mais = '++';
+    m_menos = '--';
+    shl = '<<';
+    shr = '>>';
+    or = '||';
+    and = '&&';
+    xor = '^';
     col_esq = '[';
     col_dir = ']';
     par_esq = '(';
@@ -65,23 +83,44 @@ Tokens
     mais = '+';
     menos = '-';
     q_mark = '?';
+    e_mark = '!';
     estrela = '*';
     barra = '|';
-    virgula = ',';
     slash = '/';
     s_slash = '//';
     mod = '%';
     seta_dir = '->';
-    colon = ':';
 
-    id = id_part ('_' id_part)*;
+    case = 'case';
+    default = 'default';
+    if = 'if';
+    else = 'else';
+    switch = 'switch';
+    while = 'while';
+    do = 'do';
+    for = 'for';
+    continue = 'continue';
+    break = 'break';
+    return = 'return';
+    typedef = 'typedef';
+    int_specifier = 'int';
+    float_specifier = 'float';
+    double_specifier = 'double';
+    string_specifier = 'String';
+    char_specifier = 'Char';
+    signed = 'signed';
+    unsigned = 'unsigned';
+    struct = 'struct';
+
+    id = id_part ( ('_' id_part)* | ('-' id_part)* );
+    id2 = id_part ( ('_' id_part)* | ('-' id_part)* );
 
     char = ''' not_cr_lf ''';       /* Definição de como um caractere é reconhecido => 'a' */
     char_dec = digito+;
     char_hexa = '0' ('x' | 'X') digito_hexa+;
 
     string = ''' [not_cr_lf - ''']+ ''';        /* Definição de como uma string é reconhecida => 'abcd' */
-
+    
     blank = blank;
     comment = comment;
 
@@ -98,7 +137,8 @@ Productions
 
     start = 
         {grammar} grammar | 
-        {expression} expr;
+        {expression} expr |
+        {atribuicao} atr;
 
     grammar = P.package? P.helpers? P.states? P.tokens? P.ign_tokens? P.productions?;
 
@@ -139,6 +179,13 @@ Productions
     concat = [expr_uns]:expr_un*;
 
     expr_un = basic op_un?;
+
+    tipos = 
+        {int} T.int_specifier |
+        {float} T.float_specifier |
+        {double} T.double_specifier |
+        {char} T.char_specifier |
+        {string} T.string_specifier;
 
     basic = 
         {char} P.char |
@@ -202,3 +249,7 @@ Productions
     term = 
         {numero} char_dec |
         {expr} par_esq expr par_dir; 
+
+    atr = 
+        {sinonimo} tipos id igualdade id2 semicolon |
+        {equivale} tipos id igualdade expr semicolon;

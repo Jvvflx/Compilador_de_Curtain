@@ -1,1 +1,5 @@
-9823 + 1238 - 12 / 234 * 23 - (12*4)
+int ab_cd;
+float ef;
+double gh;
+String ij;
+Char kl;

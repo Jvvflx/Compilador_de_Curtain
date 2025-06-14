@@ -78,6 +78,27 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outAExpressionStart(node);
     }
 
+    public void inAAtribuicaoStart(AAtribuicaoStart node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAAtribuicaoStart(AAtribuicaoStart node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAAtribuicaoStart(AAtribuicaoStart node)
+    {
+        inAAtribuicaoStart(node);
+        if(node.getAtr() != null)
+        {
+            node.getAtr().apply(this);
+        }
+        outAAtribuicaoStart(node);
+    }
+
     public void inAGrammar(AGrammar node)
     {
         defaultIn(node);
@@ -665,6 +686,111 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getOpUn().apply(this);
         }
         outAExprUn(node);
+    }
+
+    public void inAIntTipos(AIntTipos node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAIntTipos(AIntTipos node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAIntTipos(AIntTipos node)
+    {
+        inAIntTipos(node);
+        if(node.getIntSpecifier() != null)
+        {
+            node.getIntSpecifier().apply(this);
+        }
+        outAIntTipos(node);
+    }
+
+    public void inAFloatTipos(AFloatTipos node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAFloatTipos(AFloatTipos node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAFloatTipos(AFloatTipos node)
+    {
+        inAFloatTipos(node);
+        if(node.getFloatSpecifier() != null)
+        {
+            node.getFloatSpecifier().apply(this);
+        }
+        outAFloatTipos(node);
+    }
+
+    public void inADoubleTipos(ADoubleTipos node)
+    {
+        defaultIn(node);
+    }
+
+    public void outADoubleTipos(ADoubleTipos node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseADoubleTipos(ADoubleTipos node)
+    {
+        inADoubleTipos(node);
+        if(node.getDoubleSpecifier() != null)
+        {
+            node.getDoubleSpecifier().apply(this);
+        }
+        outADoubleTipos(node);
+    }
+
+    public void inACharTipos(ACharTipos node)
+    {
+        defaultIn(node);
+    }
+
+    public void outACharTipos(ACharTipos node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseACharTipos(ACharTipos node)
+    {
+        inACharTipos(node);
+        if(node.getCharSpecifier() != null)
+        {
+            node.getCharSpecifier().apply(this);
+        }
+        outACharTipos(node);
+    }
+
+    public void inAStringTipos(AStringTipos node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAStringTipos(AStringTipos node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAStringTipos(AStringTipos node)
+    {
+        inAStringTipos(node);
+        if(node.getStringSpecifier() != null)
+        {
+            node.getStringSpecifier().apply(this);
+        }
+        outAStringTipos(node);
     }
 
     public void inACharBasic(ACharBasic node)
@@ -1609,5 +1735,79 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getParDir().apply(this);
         }
         outAExprTerm(node);
+    }
+
+    public void inASinonimoAtr(ASinonimoAtr node)
+    {
+        defaultIn(node);
+    }
+
+    public void outASinonimoAtr(ASinonimoAtr node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseASinonimoAtr(ASinonimoAtr node)
+    {
+        inASinonimoAtr(node);
+        if(node.getTipos() != null)
+        {
+            node.getTipos().apply(this);
+        }
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
+        if(node.getIgualdade() != null)
+        {
+            node.getIgualdade().apply(this);
+        }
+        if(node.getId2() != null)
+        {
+            node.getId2().apply(this);
+        }
+        if(node.getSemicolon() != null)
+        {
+            node.getSemicolon().apply(this);
+        }
+        outASinonimoAtr(node);
+    }
+
+    public void inAEquivaleAtr(AEquivaleAtr node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAEquivaleAtr(AEquivaleAtr node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAEquivaleAtr(AEquivaleAtr node)
+    {
+        inAEquivaleAtr(node);
+        if(node.getTipos() != null)
+        {
+            node.getTipos().apply(this);
+        }
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
+        if(node.getIgualdade() != null)
+        {
+            node.getIgualdade().apply(this);
+        }
+        if(node.getExpr() != null)
+        {
+            node.getExpr().apply(this);
+        }
+        if(node.getSemicolon() != null)
+        {
+            node.getSemicolon().apply(this);
+        }
+        outAEquivaleAtr(node);
     }
 }
